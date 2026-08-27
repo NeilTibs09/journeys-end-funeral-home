@@ -317,7 +317,6 @@ p:last-child { margin-bottom: 0; }
 .policy h2 { margin-bottom: 1.4rem; }
 .policy p { color: var(--body); max-width: 52ch; margin-inline: auto; }
 .policy .btn { margin-top: 2.1rem; }
-.policy__note { margin-top: 1.6rem; font-size: .82rem; color: var(--muted); }
 
 /* ---------- reviews ---------- */
 
