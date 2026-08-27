@@ -2,11 +2,7 @@
 (function () {
   'use strict';
 
-  var WA = '27813251340';
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var yr = document.getElementById('yr');
-  if (yr) yr.textContent = new Date().getFullYear();
 
   /* ---- mobile drawer ---- */
   var btn = document.getElementById('menuBtn');
@@ -17,9 +13,16 @@
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     btn.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
+    if (open) { drawer.removeAttribute('inert'); } else { drawer.setAttribute('inert', ''); }
+  }
+
+  function drawerFocusables() {
+    return Array.prototype.slice.call(drawer.querySelectorAll('a[href], button:not([disabled])'));
   }
 
   if (btn && drawer) {
+    setMenu(false);
+
     btn.addEventListener('click', function () {
       setMenu(drawer.dataset.open !== 'true');
     });
@@ -27,7 +30,22 @@
       if (e.target.closest('a')) setMenu(false);
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && drawer.dataset.open === 'true') { setMenu(false); btn.focus(); }
+      if (drawer.dataset.open !== 'true') return;
+
+      if (e.key === 'Escape') { setMenu(false); btn.focus(); return; }
+
+      if (e.key === 'Tab') {
+        var focusables = drawerFocusables();
+        if (!focusables.length) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
     });
   }
 
@@ -57,40 +75,13 @@
   /* ---- floating whatsapp ---- */
   var wa = document.getElementById('waFloat');
   if (wa) {
+    var footer = document.querySelector('.ftr');
     var show = function () {
-      wa.dataset.show = window.scrollY > 420 ? 'true' : 'false';
+      var pastThreshold = window.scrollY > 420;
+      var overFooter = footer && footer.getBoundingClientRect().top < window.innerHeight;
+      wa.dataset.show = (pastThreshold && !overFooter) ? 'true' : 'false';
     };
     show();
     window.addEventListener('scroll', show, { passive: true });
-  }
-
-  /* ---- enquiry form -> whatsapp ---- */
-  var form = document.getElementById('enquiry');
-  if (form) {
-    var err = document.getElementById('formErr');
-
-    form.addEventListener('input', function () { err.textContent = ''; });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var elName = document.getElementById('f-name');
-      var elPhone = document.getElementById('f-phone');
-      var name = elName.value.trim();
-      var phone = elPhone.value.trim();
-      var topic = document.getElementById('f-topic').value;
-      var msg = document.getElementById('f-msg').value.trim();
-
-      if (!name) { err.textContent = 'Enter your name so we know who we are speaking to.'; elName.focus(); return; }
-      if (phone.replace(/\D/g, '').length < 9) { err.textContent = 'Enter a phone number we can reach you on.'; elPhone.focus(); return; }
-
-      var body =
-        'Hello Journey\u2019s End,\n\n' +
-        'Name: ' + name + '\n' +
-        'Phone: ' + phone + '\n' +
-        'Enquiry: ' + topic +
-        (msg ? '\n\nMessage: ' + msg : '');
-
-      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(body), '_blank', 'noopener');
-    });
   }
 })();
