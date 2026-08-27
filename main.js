@@ -2,11 +2,7 @@
 (function () {
   'use strict';
 
-  var WA = '27813251340';
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var yr = document.getElementById('yr');
-  if (yr) yr.textContent = new Date().getFullYear();
 
   /* ---- mobile drawer ---- */
   var btn = document.getElementById('menuBtn');
@@ -79,57 +75,13 @@
   /* ---- floating whatsapp ---- */
   var wa = document.getElementById('waFloat');
   if (wa) {
+    var footer = document.querySelector('.ftr');
     var show = function () {
-      wa.dataset.show = window.scrollY > 420 ? 'true' : 'false';
+      var pastThreshold = window.scrollY > 420;
+      var overFooter = footer && footer.getBoundingClientRect().top < window.innerHeight;
+      wa.dataset.show = (pastThreshold && !overFooter) ? 'true' : 'false';
     };
     show();
     window.addEventListener('scroll', show, { passive: true });
-  }
-
-  /* ---- enquiry form -> whatsapp ---- */
-  var form = document.getElementById('enquiry');
-  if (form) {
-    var err = document.getElementById('formErr');
-
-    form.addEventListener('input', function () { err.textContent = ''; });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var elName = document.getElementById('f-name');
-      var elPhone = document.getElementById('f-phone');
-      var name = elName.value.trim();
-      var phone = elPhone.value.trim();
-      var topic = document.getElementById('f-topic').value;
-      var msg = document.getElementById('f-msg').value.trim();
-
-      if (!name) { err.textContent = 'Enter your name so we know who we are speaking to.'; elName.focus(); return; }
-      if (phone.replace(/\D/g, '').length < 9) { err.textContent = 'Enter a phone number we can reach you on.'; elPhone.focus(); return; }
-
-      var body =
-        'Hello Journey\u2019s End,\n\n' +
-        'Name: ' + name + '\n' +
-        'Phone: ' + phone + '\n' +
-        'Enquiry: ' + topic +
-        (msg ? '\n\nMessage: ' + msg : '');
-
-      var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(body);
-      var popup = null;
-      try { popup = window.open(url, '_blank'); } catch (ex) { popup = null; }
-
-      if (popup) {
-        popup.opener = null;
-      } else {
-        err.textContent = '';
-        var note = document.createElement('span');
-        note.textContent = "We couldn't open WhatsApp automatically \u2014 your browser may have blocked the pop-up. ";
-        var link = document.createElement('a');
-        link.href = url;
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.textContent = 'Tap here to continue on WhatsApp';
-        err.appendChild(note);
-        err.appendChild(link);
-      }
-    });
   }
 })();

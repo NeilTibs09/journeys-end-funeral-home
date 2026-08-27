@@ -303,9 +303,8 @@ p:last-child { margin-bottom: 0; }
 .team__figure img { width: 100%; height: auto; position: relative; z-index: 1; }
 .team__figure::before {
   content: ""; position: absolute; z-index: 0;
-  inset: -18px -18px 18px 18px; border: 1px solid var(--gold-pale);
+  inset: -18px; border: 1px solid var(--gold-pale);
 }
-.team__figure figcaption { margin-top: 1.5rem; font-size: .85rem; color: var(--muted); }
 .team .botanic--c { right: -10%; top: -12%; width: 38%; aspect-ratio: 1; opacity: .05; }
 
 /* ---------- policies ---------- */
@@ -332,6 +331,7 @@ p:last-child { margin-bottom: 0; }
 /* ---------- contact ---------- */
 
 .contact__grid { display: grid; gap: clamp(2.25rem, 4.5vw, 3.25rem); align-items: start; }
+.contact__info { max-width: 640px; }
 .cdl { margin: 0; }
 .cdl__row { display: flex; gap: 1.1rem; padding: .95rem 0; border-top: 1px solid var(--line); align-items: flex-start; }
 .cdl__row:last-of-type { border-bottom: 1px solid var(--line); }
@@ -342,50 +342,15 @@ p:last-child { margin-bottom: 0; }
 .cdl dd a:hover { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px; }
 .contact .btn-row { margin-top: 1.5rem; }
 
-/* form */
-.form { display: grid; gap: 1.25rem; }
-.field { display: grid; gap: .4rem; }
-.field label { font-size: .85rem; color: var(--muted); }
-.field input, .field select, .field textarea {
-  font-family: var(--sans); font-size: 1rem; color: var(--ink);
-  background: transparent; border: 0; border-bottom: 1px solid var(--gold-pale);
-  padding: .65rem 0; min-height: 48px; border-radius: 0; width: 100%;
-  transition: border-color .2s ease;
-}
-.field textarea { min-height: 96px; resize: vertical; line-height: 1.6; }
-.field select { appearance: none; cursor: pointer; padding-right: 1.75rem; }
-.field--select { position: relative; }
-.field--select::after {
-  content: ""; position: absolute; right: .3rem; bottom: 1.45rem; width: 8px; height: 8px;
-  border-right: 1px solid var(--gold-deep); border-bottom: 1px solid var(--gold-deep);
-  transform: rotate(45deg); pointer-events: none;
-}
-.field input:focus, .field select:focus, .field textarea:focus {
-  outline: none; border-bottom-color: var(--gold); border-bottom-width: 2px;
-}
-.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: none; }
-.err { font-size: .8rem; color: #A33A2C; min-height: 1em; }
-.form__note { font-size: .82rem; color: var(--muted); }
-
 /* ---------- footer ---------- */
 
 .ftr {
   background: var(--ivory); border-top: 1px solid var(--line);
-  padding: clamp(2.25rem, 4vw, 3.25rem) 0 1.5rem; color: var(--muted);
+  padding: clamp(2.5rem, 5vw, 3.75rem) 0; color: var(--muted);
 }
 .ftr__in { display: grid; gap: 1.25rem; justify-items: center; text-align: center; }
 .ftr__mark { height: 76px; width: auto; }
-.ftr__name { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); margin: 0 0 .35rem; }
-.ftr__addr { font-size: .95rem; margin: 0 0 .35rem; }
-.ftr__links { font-size: .95rem; margin: 0; }
-.ftr a { color: var(--body); text-decoration: none; }
-.ftr a:hover { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px; }
-.ftr__sep { color: var(--gold-pale); margin-inline: .4rem; }
-.ftr__base {
-  margin-top: 1.75rem; padding-top: 1.15rem; border-top: 1px solid var(--line);
-  display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: center; text-align: center;
-  font-size: .82rem; color: var(--muted);
-}
+.ftr__name { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); margin: 0; }
 
 /* ---------- floating whatsapp ---------- */
 
@@ -426,6 +391,7 @@ p:last-child { margin-bottom: 0; }
 @media (max-width: 400px) {
   .hero { padding-top: 1.75rem; }
   .hero__quote { font-size: 1.15rem; }
+  .brand__wordmark { font-size: 1.05rem; letter-spacing: .1em; margin-right: -.1em; }
 }
 
 @media (max-width: 599px) {
@@ -454,20 +420,6 @@ p:last-child { margin-bottom: 0; }
   .svc li:nth-child(3) { border-bottom: 1px solid rgba(220, 203, 174, .2); }
   .team__grid { grid-template-columns: 1.05fr .95fr; }
   .team__grid--flip .team__figure { order: -1; }
-  .contact__grid { grid-template-columns: .92fr 1.08fr; }
-  .contact__form {
-    border-left: 1px solid var(--line);
-    padding-left: clamp(2rem, 4vw, 3.25rem);
-    padding-top: clamp(2.1rem, 3vw, 2.8rem);
-  }
-}
-
-@media (min-width: 760px) {
-  .ftr__in {
-    grid-template-columns: auto 1fr; justify-items: start;
-    text-align: left; gap: clamp(1.5rem, 4vw, 2.75rem); align-items: center;
-  }
-  .ftr__base { justify-content: space-between; text-align: left; }
 }
 
 @media (prefers-reduced-motion: reduce) {
