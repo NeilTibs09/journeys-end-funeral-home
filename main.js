@@ -17,9 +17,16 @@
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     btn.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
+    if (open) { drawer.removeAttribute('inert'); } else { drawer.setAttribute('inert', ''); }
+  }
+
+  function drawerFocusables() {
+    return Array.prototype.slice.call(drawer.querySelectorAll('a[href], button:not([disabled])'));
   }
 
   if (btn && drawer) {
+    setMenu(false);
+
     btn.addEventListener('click', function () {
       setMenu(drawer.dataset.open !== 'true');
     });
@@ -27,7 +34,22 @@
       if (e.target.closest('a')) setMenu(false);
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && drawer.dataset.open === 'true') { setMenu(false); btn.focus(); }
+      if (drawer.dataset.open !== 'true') return;
+
+      if (e.key === 'Escape') { setMenu(false); btn.focus(); return; }
+
+      if (e.key === 'Tab') {
+        var focusables = drawerFocusables();
+        if (!focusables.length) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
     });
   }
 
@@ -90,7 +112,24 @@
         'Enquiry: ' + topic +
         (msg ? '\n\nMessage: ' + msg : '');
 
-      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(body), '_blank', 'noopener');
+      var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(body);
+      var popup = null;
+      try { popup = window.open(url, '_blank'); } catch (ex) { popup = null; }
+
+      if (popup) {
+        popup.opener = null;
+      } else {
+        err.textContent = '';
+        var note = document.createElement('span');
+        note.textContent = "We couldn't open WhatsApp automatically \u2014 your browser may have blocked the pop-up. ";
+        var link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'Tap here to continue on WhatsApp';
+        err.appendChild(note);
+        err.appendChild(link);
+      }
     });
   }
 })();
