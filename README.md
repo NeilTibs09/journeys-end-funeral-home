@@ -1,5 +1,15 @@
 # Journey's End Funeral Home — website
 
+## Project status: ✅ Completed
+
+This is the final, production-ready build of the Journey's End Funeral Home
+website. It has been through a full functional, mobile, desktop, accessibility,
+SEO, and content audit — see the closed PRs on this repository for the detailed
+history. Approved and ready for deployment/handover to the client.
+
+Final commit: `4879b7b` — "Move Google Reviews below Team section; remove policy
+call-out text".
+
 Static site. No build step, no dependencies, no framework.
 
 ## Structure
@@ -7,7 +17,7 @@ Static site. No build step, no dependencies, no framework.
 ```
 index.html    Markup, SEO meta, JSON-LD
 styles.css    All styles
-main.js       Mobile menu, scroll reveal, floating WhatsApp button, enquiry form
+main.js       Mobile menu, scroll reveal, floating WhatsApp button
 assets/       Images referenced by index.html (see below)
 ```
 
@@ -59,4 +69,5 @@ here depends on this build environment.
   and the JSON-LD block near the top (keep both in sync).
 - WhatsApp number: `27813251340` appears throughout `index.html` in `wa.me` links —
   search and replace if it changes.
-- Enquiry form behaviour (opens WhatsApp with the enquiry pre-filled): `main.js`.
+- There is no contact form — enquiries go through the `tel:`/`wa.me` links and the
+  floating WhatsApp button (`main.js`), by design.
